@@ -40,6 +40,12 @@ class Film
       results = SqlRunner.run(sql,values)
       return Customer.map_all(results)
   end
+  #How many customers are going to watch the movie
+  def how_many_customers
+    sql = 'SELECT COUNT(film_id) FROM tickets WHERE film_id = $1'
+    values = [@id]
+    return SqlRunner.run(sql,values)[0]['count'].to_i
+  end
 
   def self.all
     sql = 'SELECT * from films'
