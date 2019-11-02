@@ -54,6 +54,7 @@ class Ticket
     customer = find_customer_by_id(@customer_id)
     film = find_film_by_id(@film_id)
     customer.funds -= film.price
+    customer.tickets_bougth += 1
     customer.update()
   end
 

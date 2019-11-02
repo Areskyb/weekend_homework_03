@@ -6,18 +6,19 @@ require_relative('../db/sql_runner.rb')
 require_relative('film.rb')
 
 class Customer
-  attr_accessor :name, :funds
+  attr_accessor :name, :funds, :tickets_bougth
   attr_reader :id
 
   def initialize(options)
     @name = options['name']
     @funds = options['funds'].to_i
     @id = options['id'].to_i if options['id']
+    @tickets_bougth = options['tickets_bougth'].to_i
   end
 
   def save
-    sql = 'INSERT INTO customers (name,funds) VALUES ($1,$2) RETURNING id'
-    values = [@name, @funds]
+    sql = 'INSERT INTO customers (name,funds, tickets_bougth) VALUES ($1,$2,$3) RETURNING id'
+    values = [@name, @funds, @tickets_bougth]
     result = SqlRunner.run(sql, values)
     @id = result[0]['id'].to_i
   end
@@ -29,8 +30,8 @@ class Customer
   end
 
   def update
-    sql = 'UPDATE customers SET (name,funds) = ($1,$2) WHERE id = $3'
-    values = [@name, @funds, @id]
+    sql = 'UPDATE customers SET (name,funds, tickets_bougth) = ($1,$2,$3) WHERE id = $4'
+    values = [@name, @funds, @tickets_bougth, @id]
     SqlRunner.run(sql, values)
   end
 
@@ -40,7 +41,6 @@ class Customer
       results = SqlRunner.run(sql,values)
       return Film.map_all(results)
   end
-
 
   def self.all
     sql = 'SELECT * from customers'
