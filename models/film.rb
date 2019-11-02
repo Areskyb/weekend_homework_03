@@ -55,6 +55,19 @@ class Film
       return results.map { |screening| Screening.new(screening).hour  }
   end
 
+  def sells_by_hour(hour)
+    sql = 'SELECT count(hour) from tickets WHERE film_id = $1 AND hour = $2'
+    values = [@id, hour]
+    return SqlRunner.run(sql,values)[0]['count'].to_i
+
+  end
+
+  def sellings
+    hours = self.display_hours
+    total = hours.map { |hour| [hour, self.sells_by_hour(hour)]}
+    return total.sort_by{|k| k[1]}.reverse
+  end
+
 
   def self.all
     sql = 'SELECT * from films'

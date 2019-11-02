@@ -68,6 +68,8 @@ screening6.save
 
 ticket1 = Ticket.new('customer_id' => customer1.id, 'film_id' => film1.id, 'hour' => screening1.hour)
 ticket1.save
+ticket1 = Ticket.new('customer_id' => customer2.id, 'film_id' => film1.id, 'hour' => screening1.hour)
+ticket1.save
 ticket1.buy_ticket
 ticket2 = Ticket.new('customer_id' => customer1.id, 'film_id' => film2.id, 'hour' => screening2.hour)
 ticket2.save
