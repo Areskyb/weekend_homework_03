@@ -11,7 +11,7 @@ class Customer
 
   def initialize(options)
     @name = options['name']
-    @funds = options['funds']
+    @funds = options['funds'].to_i
     @id = options['id'].to_i if options['id']
   end
 
@@ -40,6 +40,7 @@ class Customer
       results = SqlRunner.run(sql,values)
       return Film.map_all(results)
   end
+
 
   def self.all
     sql = 'SELECT * from customers'

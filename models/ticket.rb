@@ -3,6 +3,8 @@
 require('pg')
 require('pry')
 require_relative('../db/sql_runner.rb')
+require_relative('customer.rb')
+require_relative('film.rb')
 
 class Ticket
   attr_accessor :customer_id, :film_id
@@ -31,6 +33,28 @@ class Ticket
     sql = 'UPDATE tickets SET (customer_id,film_id) = ($1,$2) WHERE id = $3'
     values = [@customer_id, @film_id, @id]
     SqlRunner.run(sql, values)
+  end
+
+  def find_customer_by_id(id)
+    sql = 'SELECT * FROM customers WHERE id = $1'
+    values = [@customer_id]
+    results = SqlRunner.run(sql,values)
+    return Customer.map_all(results)[0]
+  end
+
+  def find_film_by_id(id)
+    sql = 'SELECT * FROM films WHERE id = $1'
+    values = [@film_id]
+    results = SqlRunner.run(sql,values)
+    return Film.map_all(results)[0]
+  end
+
+  #BASI EXTENSION TICKET BUY
+  def buy_ticket
+    customer = find_customer_by_id(@customer_id)
+    film = find_film_by_id(@film_id)
+    customer.funds -= film.price
+    customer.update()
   end
 
   def self.all
