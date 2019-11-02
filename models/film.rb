@@ -3,6 +3,7 @@
 require('pg')
 require('pry')
 require_relative('../db/sql_runner.rb')
+require_relative('screenings.rb')
 require_relative('customer.rb')
 
 class Film
@@ -46,6 +47,14 @@ class Film
     values = [@id]
     return SqlRunner.run(sql,values)[0]['count'].to_i
   end
+
+  def display_hours
+      sql = 'SELECT * FROM screenings WHERE film_name = $1'
+      values = [@title]
+      results = SqlRunner.run(sql,values)
+      return results.map { |screening| Screening.new(screening).hour  }
+  end
+
 
   def self.all
     sql = 'SELECT * from films'
